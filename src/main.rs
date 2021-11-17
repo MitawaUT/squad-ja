@@ -55,7 +55,7 @@ fn ja_translate(txt: Vec<&str>) -> Vec<String> {
 
     let mut ans = Vec::<String>::new();
     for t in &translated {
-        ans.push(String::from(&t.text));
+        ans.push(t.text.clone());
     }
     ans
 }
@@ -73,11 +73,11 @@ fn main() {
     for data in &dataset {
         pb.inc(1);
         let mut paragraphs_ja = Vec::<QAWithContext>::new();
-        let title_ja = String::from(&ja_translate(vec![&data.title])[0]);
+        let title_ja = ja_translate(vec![&data.title])[0].clone();
 
         for qa_with_context in &data.paragraphs {
             let mut qas_ja = Vec::<QA>::new();
-            let context_ja = String::from(&ja_translate(vec![&qa_with_context.context])[0]);
+            let context_ja = ja_translate(vec![&qa_with_context.context])[0].clone();
             for qa in &(*qa_with_context).qas {
                 let answers = if qa.is_impossible {
                     qa.plausible_answers.as_ref().unwrap()
@@ -85,7 +85,7 @@ fn main() {
                     qa.answers.as_ref().unwrap()
                 };
 
-                let question_ja = String::from(&ja_translate(vec![&qa.question])[0]);
+                let question_ja = ja_translate(vec![&qa.question])[0].clone();
                 let mut answers_ja = Vec::<Answer>::new();
 
                 let mut text_to_ja = Vec::<&str>::new();
@@ -97,7 +97,7 @@ fn main() {
 
                 for (i, answer) in answers.iter().enumerate() {
                     answers_ja.push(Answer {
-                        text: String::from(&text_ja[i]),
+                        text: text_ja[i].clone(),
                         answer_start: answer.answer_start,
                     });
                 }
